@@ -3,7 +3,7 @@
 class Help extends Controller {
 
     function __construct() {
-        echo "We are in help";
+        parent::__construct();
     }
 
     public function test($arg = "") {
