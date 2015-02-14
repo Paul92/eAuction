@@ -2,7 +2,7 @@
 <html>
   <head>
     <title> Test </title>
-    <link rel="stylesheet" href="public/css/default.css" />
+    <link rel="stylesheet" href="<?php echo ROOT_URL;?>/public/css/default.css" />
   </head>
 <body>
 
