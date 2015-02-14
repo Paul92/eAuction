@@ -6,6 +6,10 @@ class Help extends Controller {
         parent::__construct();
     }
 
+    function index() {
+        $this->view->render('help/index');
+    }
+
     public function test($arg = "") {
         echo "That's ok";
         echo "Optional $arg";
