@@ -10,7 +10,6 @@
     <a href="index">Index</a>
     <a href="help">Help</a>
     <a href="login">Login</a>
-    <hr/>
   </div>
 
   <div id="content">
