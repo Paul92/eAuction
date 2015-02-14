@@ -33,12 +33,21 @@ class Bootstrap {
         // The url format is host/controllers/method/parameter
         // Each controller coresponds to a page. The default method called is
         // index.
-        if (isset($url[2])) {
-            $controller->{$url[1]}($url[2]);
-        } else if (isset($url[1])) {
-            $controller->{$url[1]}();
+        if (isset($url[2]))
+            $arg = $url[2];
+        else
+            $arg = null;
+
+        if (isset($url[1])) {
+            if (method_exists($controller, $url[1])) {
+                $controller->{$url[1]}($arg);
+            } else {
+                require 'controllers/error.php';   // CREATE CONSTANT!!!
+                $controller = new Error();
+                $controller->index();
+            }
         } else {
-            $controller->index();
+            $controller->index(1);
         }
 
         return true;
