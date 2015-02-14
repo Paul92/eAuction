@@ -1,16 +1,11 @@
 <?php
 
-$url = rtrim($_GET['url']);
-$url = explode('/', $url);
+require 'libs/Bootstrap.php';
+require 'libs/Controller.php';
+require 'libs/View.php';
+require 'libs/Model.php';
 
-require 'controllers/' . $url[0] . '.php';
+require 'config/constants.php';
 
-$controller = new $url[0];
+$app = new Bootstrap();
 
-if (isset($url[2])) {
-    $controller->{$url[1]}($url[2]);
-} else {
-    if (isset($url[1])) {
-        $controller->{$url[1]}();
-    }
-}
