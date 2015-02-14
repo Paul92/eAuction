@@ -29,12 +29,16 @@ class Bootstrap {
 
         $controller = new $url[0];
 
+
+        // The url format is host/controllers/method/parameter
+        // Each controller coresponds to a page. The default method called is
+        // index.
         if (isset($url[2])) {
             $controller->{$url[1]}($url[2]);
+        } else if (isset($url[1])) {
+            $controller->{$url[1]}();
         } else {
-            if (isset($url[1])) {
-                $controller->{$url[1]}();
-            }
+            $controller->index();
         }
 
         return true;
