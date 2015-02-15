@@ -76,4 +76,5 @@ class HashModel extends Model {
         else
             return bin2hex(substr($output, 0, $key_length));
     }
+}
 ?>
