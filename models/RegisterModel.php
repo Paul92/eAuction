@@ -1,6 +1,6 @@
 <?php
 
-class RegisterModel extends Model {
+class RegisterModel extends HashModel {
 
     public function __construct() {
         parent::__construct();
