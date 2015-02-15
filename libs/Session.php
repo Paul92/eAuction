@@ -13,6 +13,10 @@ class Session {
         $_SESSION[$key] = $value;
     }
 
+    public static function remove($key) {
+        unset($key);
+    }
+
     public static function get($key) {
         return $_SESSION[$key];
     }
