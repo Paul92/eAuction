@@ -14,10 +14,12 @@ class Session {
     }
 
     public static function remove($key) {
-        unset($_SESSION[$key]);
+        if (isset($_SESSION[$key]))
+            unset($_SESSION[$key]);
     }
 
     public static function get($key) {
-        return $_SESSION[$key];
+        if (isset($_SESSION[$key]))
+            return $_SESSION[$key];
     }
 }
