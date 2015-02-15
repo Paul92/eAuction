@@ -27,6 +27,7 @@ class Bootstrap {
             return false;
         }
 
+        Session::init();
         $controller = new $url[0];
         $controller->loadModel($url[0]);
 
