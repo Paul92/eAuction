@@ -1,6 +1,6 @@
 <?php
 
-class LoginModel extends Model {
+class LoginModel extends HashModel {
 
     public function __construct() {
         parent::__construct();
