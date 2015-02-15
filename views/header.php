@@ -10,6 +10,7 @@
     <a href="<?php echo ROOT_URL;?>/index">Index</a>
     <a href="<?php echo ROOT_URL;?>/help">Help</a>
     <a href="<?php echo ROOT_URL;?>/login">Login</a>
+    <a href="<?php echo ROOT_URL;?>/register">Register</a>
   </div>
 
   <div id="content">
