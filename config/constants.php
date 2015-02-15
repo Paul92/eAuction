@@ -17,4 +17,4 @@ define("HASH_SECTIONS", 4);
 define("HASH_ALGORITHM_INDEX", 0);
 define("HASH_ITERATION_INDEX", 1);
 define("HASH_SALT_INDEX", 2);
-define("HASH_PBKDF2_INDEX", 3)
+define("HASH_PBKDF2_INDEX", 3);
