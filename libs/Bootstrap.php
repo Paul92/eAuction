@@ -28,7 +28,7 @@ class Bootstrap {
         }
 
         $controller = new $url[0];
-
+        $controller->loadModel($url[0]);
 
         // The url format is host/controllers/method/parameter
         // Each controller coresponds to a page. The default method called is
