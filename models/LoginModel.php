@@ -9,7 +9,18 @@ class LoginModel extends HashModel {
     }
 
     public function run() {
-        
+        $login    = $_POST['login'];
+        $password = $_POST['password'];
+        $statement = $this->db->prepare("SELECT * FROM usersTEST WHERE 
+                                      login = :login AND password = :password");
+        $statement->execute(array(':login' => $_POST['login'], 
+                                  ':password' => $_POST['password']));
+        if ($statement->rowCount()) {
+            Session::set('loggedIn', true);
+            header('location: ../index');
+        } else {
+            header('location: ../login/retry');
+        }
     }
 
     private function validate_password($password, $correct_hash)
