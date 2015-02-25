@@ -7,4 +7,36 @@ class Database extends PDO {
                           DB_USER, DB_PASS);
     }
 
+    public function insertQuery($table, $columns, $values) {
+        $query = "INSERT INTO $table (";
+        foreach ($columns as $column)
+            $query .= $column . ', ';
+        $query = rtrim($query, ' ,');
+        $query .= ') VALUES (';
+        foreach ($columns as $column)
+            $query .= ':'.$column . ', ';
+        $query = rtrim($query, ' ,');
+        $query.= ')';
+        $this->executeQuery($query, $values);
+    }
+
+    public function executeQuery($query, $values = array()) {
+        $preparedValues = array();
+        if (!empty($values))
+            foreach ($values as $key => $val)
+                $preparedValues[':'.$key] = $val;
+//        echo $query."<br>";
+//        var_dump($preparedValues);
+        $statement = $this->prepare($query);
+        $success = $statement->execute($preparedValues);
+        if (!$success) {
+            $errorMessage = 'Database exception: ';
+            $errors = $statement->errorInfo();
+            foreach($errors as $error)
+                $errorMessage .= $error;
+            throw new Exception($errorMessage);
+        }
+        return $statement;
+    }
+
 }
