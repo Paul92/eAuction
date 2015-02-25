@@ -11,7 +11,8 @@ class Register extends Controller {
   }
 
   function run() {
-      $this->model->run();
+      $arr = $this->model->run();
+      $this->view->render('register/index', $arr);
   }
 
 }
