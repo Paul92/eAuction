@@ -4,29 +4,31 @@ require 'models/HashModel.php';
 
 class RegisterModel extends HashModel {
 
-    const NO_NICKNAME_MSG      = 'Please insert a nickname.';
-    const NO_PASSWORD_MSG      = 'Please insert a password.';
-    const NO_SURNAME_MSG       = 'Please insert a surname.';
-    const NO_FIRSTNAME_MSG     = 'Please insert a first name.';
-    const NO_EMAIL_MSG         = 'Please insert an email.';
-    const NO_PHONE_NUMBER_MSG  = 'Please insert a phone number.';
-    const NO_CITY_MSG          = 'Please insert a city.';
-    const NO_COUNTRY_MSG       = 'Please insert a country.';
-    const NO_POST_CODE_MSG     = 'Please insert a post code.';
-    const NO_ADDRESS_LINE1_MSG = 'Please insert an address line.';
+    const NO_NICKNAME_MSG         = 'Please insert a nickname.';
+    const NO_PASSWORD_MSG         = 'Please insert a password.';
+    const NO_CONFIRM_PASSWORD_MSG = 'Please confirm the password.';
+    const NO_SURNAME_MSG          = 'Please insert a surname.';
+    const NO_FIRSTNAME_MSG        = 'Please insert a first name.';
+    const NO_EMAIL_MSG            = 'Please insert an email.';
+    const NO_PHONE_NUMBER_MSG     = 'Please insert a phone number.';
+    const NO_CITY_MSG             = 'Please insert a city.';
+    const NO_COUNTRY_MSG          = 'Please insert a country.';
+    const NO_POST_CODE_MSG        = 'Please insert a post code.';
+    const NO_ADDRESS_LINE1_MSG    = 'Please insert an address line.';
 
-    const BAD_EMAIL_MSG        = 'Email address not valid.';
-    const PASSWORD_TOO_SHORT   = 'Please insert a password longer than 6.';
-    const PASSWORD_NO_LETTERS  = 'The password must contain at least one letter';
-    const PASSWORD_NO_DIGITS   = 'The password must contain at least one digit';
-    const BAD_PHONE_NUMBER_MSG = 'The phone number has an inappropiate format.';
+    const BAD_EMAIL_MSG           = 'Email address not valid.';
+    const PASSWORD_TOO_SHORT      = 'Please insert a password longer than 6.';
+    const PASSWORD_NO_LETTERS     = 'The password must contain at least one letter';
+    const PASSWORD_NO_DIGITS      = 'The password must contain at least one digit';
+    const PASSWORDS_DO_NOT_MATCH  = 'Passwords do not match.';
+    const BAD_PHONE_NUMBER_MSG    = 'The phone number has an inappropiate format.';
 
-    const NOT_ACCEPTED_TC      = 'Please read and accept the
-                                  <a href="TC">Terms and Conditions</a>.';
+    const NOT_ACCEPTED_TC         = 'Please read and accept the
+                                     <a href="TC">Terms and Conditions</a>.';
 
-    const ADDRESS_ALREADY_EXISTS = 'This address is already registered. Please insert a new address.';
+    const ADDRESS_ALREADY_EXISTS  = 'This address is already registered. Please insert a new address.';
     const NICKNAME_ALREADY_EXISTS = 'This nickname is already in use. Please insert another nickname.';
-    const EMAIL_ALREADY_EXISTS = 'This email is already in use. Please insert another email.';
+    const EMAIL_ALREADY_EXISTS    = 'This email is already in use. Please insert another email.';
 
     public function __construct() {
         parent::__construct();
