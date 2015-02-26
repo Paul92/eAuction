@@ -5,7 +5,7 @@ require 'models/HashModel.php';
 class LoginModel extends HashModel {
 
     const WRONG_USER_OR_PASS = 'Wrong user of password. Please retry.';
-    const NO_NICKNAME_MSG    = 'Please insert a nickname.';
+    const NO_LOGIN_MSG       = 'Please insert a login.';
     const NO_PASSWORD_MSG    = 'Please insert a password.';
 
     public function __construct() {
@@ -15,10 +15,10 @@ class LoginModel extends HashModel {
     public function run() {
         $errors    = array();
         $formArray = array();
-        if (!isset($_POST['nickname']) || empty($_POST['nickname']))
-            $errors['nickname'] = self::NO_NICKNAME_MSG;
+        if (!isset($_POST['login']) || empty($_POST['login']))
+            $errors['login'] = self::NO_LOGIN_MSG;
         else
-            $nickname = $_POST['nickname'];
+            $login = $_POST['login'];
 
         if (!isset($_POST['password']) || empty($_POST['password']))
             $errors['password'] = self::NO_PASSWORD_MSG;
@@ -26,9 +26,9 @@ class LoginModel extends HashModel {
             $password = $_POST['password'];
 
         if (empty($errors)) {
-            $fetchHashQuery = 'SELECT password FROM users WHERE nickname = :nick';
+            $fetchHashQuery = 'SELECT password FROM users WHERE nickname = :login OR email = :login';
             $fetchHashStmt  = $this->db->prepare($fetchHashQuery);
-            $fetchHashStmt->execute(array(':nick' => $nickname));
+            $fetchHashStmt->execute(array(':login' => $login));
             $array = $fetchHashStmt->fetch(PDO::FETCH_ASSOC);
             if (empty($array)) {
                 $errors[] = self::WRONG_USER_OR_PASS;
@@ -45,7 +45,7 @@ class LoginModel extends HashModel {
         if (empty($errors))
             return(array('errors' => $errors,
                          'formArray' => array('password' => $password,
-                                              'nickname' => $nickname)));
+                                              'login' => $login)));
         else
             return(array('errors' => $errors));
     }
@@ -64,3 +64,4 @@ class LoginModel extends HashModel {
                           );
     }
 }
+
