@@ -47,7 +47,8 @@
   background-color: #EEEEEE;
 }
 html,body{
-    height: 100%
+    height: 100%;
+    width: 100%;
 }
 
 #header{
@@ -85,7 +86,19 @@ html,body{
             </li>
             <?php if (Session::get('loggedIn')): ?>
             <li>
-              <a href="dashboard/logout">Logout</a>
+              <a href="newAuction">
+                <span class="glyphicon glyphicon-plus"></span> Open Auction
+              </a>
+            </li>
+            <li>
+              <a href="dashboard">
+                <span class="glyphicon glyphicon-user"></span> Dashboard
+              </a>
+            </li>
+            <li>
+              <a href="dashboard/logout">
+                <span class="glyphicon glyphicon-log-out"></span> Logout
+              </a>
             </li>
             <?php else: ?>
             <li>
