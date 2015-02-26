@@ -55,6 +55,9 @@ class RegisterModel extends HashModel {
         else
             $formArray['nickname'] = $_POST['nickname'];
 
+        if (!isset($_POST['confirmPassword']) || empty($_POST['confirmPassword']))
+            $registerErrors['confirmPassword'] = self::NO_CONFIRM_PASSWORD_MSG;
+
         if (!isset($_POST['password']) || empty($_POST['password']))
             $registerErrors['password'] = self::NO_PASSWORD_MSG;
         else {
@@ -63,8 +66,11 @@ class RegisterModel extends HashModel {
                 $registerErrors['password'] = self::PASSWORD_TOO_SHORT;
             else if(!preg_match('/[a-zA-Z]/', $_POST['password']))
                 $registerErrors['password'] = self::PASSWORD_NO_LETTERS;
-            if(!preg_match('/\d/', $_POST['password']))
+            else if(!preg_match('/\d/', $_POST['password']))
                 $registerErrors['password'] = self::PASSWORD_NO_DIGITS;
+            else if(!isset($registerErrors['confirmPassword']) &&
+                    $_POST['password'] != $_POST['confirmPassword'])
+                $registerErrors['password'] = self::PASSWORDS_DO_NOT_MATCH;
         }
 
         $formArray['title'] = $_POST['title'];
