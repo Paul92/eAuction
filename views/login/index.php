@@ -14,12 +14,12 @@
 
         <div class="form-group">
           <div class="top10 col-sm-12">
-            <label for="nickname" class="control-label col-sm-4">Nickname</label>
+            <label for="login" class="control-label col-sm-4">Nickname or email</label>
             <div class="col-sm-6">
-              <input type="text" class="form-control col-sm-8" id="nickname"
-               value="<?php if(isset($formArray['nickname'])) 
-                                echo $formArray['nickname'];?>"
-               name="nickname" placeholder="Nickname" >
+              <input type="text" class="form-control col-sm-8" id="login"
+               value="<?php if(isset($formArray['login'])) 
+                                echo $formArray['login'];?>"
+               name="login" placeholder="Nickname or email" >
             </div>
           </div>
           <div class="top10 col-sm-12">
