@@ -28,6 +28,21 @@ class Database extends PDO {
         $this->executeQuery($query, $values);
     }
 
+    public function exists($table, $columns, $values) {
+        $values = self::unsetNonExistent($values, $columns);
+        $query = "SELECT * FROM $table WHERE ";
+        foreach ($columns as $column)
+            $query .= "$column = :$column and ";
+        $query = substr($query, 0, strlen($query) - 5);
+
+        $statement = $this->executeQuery($query, $values);
+
+        if ($statement->fetch(PDO::FETCH_ASSOC))
+            return true;
+        else
+            return false;
+    }
+
     public function executeQuery($query, $values = array()) {
         $preparedValues = array();
         if (!empty($values))
