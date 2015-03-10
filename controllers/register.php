@@ -12,7 +12,10 @@ class Register extends Controller {
 
   function run() {
       $arr = $this->model->run();
-      $this->view->render('register/index', $arr);
+      if (isset($arr['errors']) && !empty($arr['errors']))
+          $this->view->render('register/index', $arr);
+      else
+          header('Location: '.ROOT_URL.'/index/index/user_created');
   }
 
 }
