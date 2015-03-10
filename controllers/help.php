@@ -10,9 +10,4 @@ class Help extends Controller {
         $this->view->render('help/index');
     }
 
-    public function test($arg = "") {
-        echo "That's ok";
-        echo "Optional $arg";
-    }
-
 }
