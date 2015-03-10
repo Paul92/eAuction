@@ -16,6 +16,7 @@ class Database extends PDO {
     }
 
     public function insertQuery($table, $columns, $values) {
+        $values = self::unsetNonExistent($values, $columns);
         $query = "INSERT INTO $table (";
         foreach ($columns as $column)
             $query .= $column . ', ';
