@@ -22,4 +22,8 @@ class Session {
         if (isset($_SESSION[$key]))
             return $_SESSION[$key];
     }
+
+    public static function exists($key) {
+        return isset($_SESSION[$key]);
+    }
 }
