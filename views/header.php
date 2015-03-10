@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="<?php echo ROOT_URL;?>/public/css/bootstrap.min.css" rel="stylesheet">
     <link href="<?php echo ROOT_URL;?>/public/css/styles.css" rel="stylesheet">
+    <link rel="stylesheet" href="//blueimp.github.io/Gallery/css/blueimp-gallery.min.css">
+    <link rel="stylesheet" href="<?php echo ROOT_URL;?>/public/css/style.css">
+    <link rel="stylesheet" href="<?php echo ROOT_URL;?>/public/css/jquery.fileupload.css">
+    <link rel="stylesheet" href="<?php echo ROOT_URL;?>/public/css/jquery.fileupload-ui.css">
+    <link rel="stylesheet" type="text/css" href="<?php echo ROOT_URL;?>/public/css/slider.css">
 
 <style type="text/css">
     .bs-example{
