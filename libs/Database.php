@@ -7,6 +7,14 @@ class Database extends PDO {
                           DB_USER, DB_PASS);
     }
 
+    private function unsetNonExistent($array, $keys) {
+        $newArray = array();
+        foreach ($keys as $key)
+            if (isset($array[$key]))
+                $newArray[$key] = $array[$key];
+        return $newArray;
+    }
+
     public function insertQuery($table, $columns, $values) {
         $query = "INSERT INTO $table (";
         foreach ($columns as $column)
