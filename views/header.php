@@ -85,23 +85,23 @@ html,body{
         <div class="collapse navbar-collapse navHeaderCollapse">
           <ul class="nav navbar-nav navbar-right">
             <li>
-              <a href="index">
+              <a href="<?php echo ROOT_URL;?>/index">
                 <span class="glyphicon glyphicon-home"></span> Home
               </a>
             </li>
             <?php if (Session::get('loggedIn')): ?>
             <li>
-              <a href="newAuction">
+              <a href="<?php echo ROOT_URL;?>/newAuction">
                 <span class="glyphicon glyphicon-plus"></span> Open Auction
               </a>
             </li>
             <li>
-              <a href="dashboard">
+              <a href="<?php echo ROOT_URL;?>/dashboard">
                 <span class="glyphicon glyphicon-user"></span> Dashboard
               </a>
             </li>
             <li>
-              <a href="dashboard/logout">
+              <a href="<?php echo ROOT_URL;?>/logout">
                 <span class="glyphicon glyphicon-log-out"></span> Logout
               </a>
             </li>
