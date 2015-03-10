@@ -26,7 +26,8 @@ class LoginModel extends HashModel {
             $password = $_POST['password'];
 
         if (empty($errors)) {
-            $fetchHashQuery = 'SELECT password FROM users WHERE nickname = :login OR email = :login';
+            $fetchHashQuery = 'SELECT id, password FROM users WHERE
+                               nickname = :login OR email = :login';
             $fetchHashStmt  = $this->db->prepare($fetchHashQuery);
             $fetchHashStmt->execute(array(':login' => $login));
             $array = $fetchHashStmt->fetch(PDO::FETCH_ASSOC);
