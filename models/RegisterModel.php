@@ -30,6 +30,13 @@ class RegisterModel extends HashModel {
     const NICKNAME_ALREADY_EXISTS = 'This nickname is already in use. Please insert another nickname.';
     const EMAIL_ALREADY_EXISTS    = 'This email is already in use. Please insert another email.';
 
+
+    const SUCESSFUL               = 'User succesfully created.';
+
+    const ADDRESS_COLUMNS = array('country', 'county', 'city',
+                                  'addressLine1', 'addressLine2',
+                                  'postCode');
+
     public function __construct() {
         parent::__construct();
     }
@@ -143,60 +150,42 @@ class RegisterModel extends HashModel {
         return array('errors' => $registerErrors, 'formArray' => $formArray);
     }
 
-    private function unsetNonExistent($array, $keys) {
-        $newArray = array();
-        foreach ($keys as $key)
-            if (isset($array[$key]))
-                $newArray[$key] = $array[$key];
-        return $newArray;
-    }
-
-    private function exists($table, $columns, $values) {
-        $query = "SELECT * FROM $table WHERE ";
-        foreach ($columns as $column)
-            $query .= "$column = :$column and ";
-        $query = substr($query, 0, strlen($query) - 5);
-
-        $statement = $this->db->executeQuery($query, $values);
-
-        if ($statement->fetch(PDO::FETCH_ASSOC))
-            return true;
-        else
-            return false;
-    }
-
     private function insertAddress($values) {
-        $addressColumns = array('country', 'county', 'city', 'addressLine1',
-                                'addressLine2', 'postCode');
 
-        $values = self::unsetNonExistent($values, $addressColumns);
-
-        if (self::exists('address', $addressColumns, $values))
-            return self::ADDRESS_ALREADY_EXISTS;
-
-        $this->db->insertQuery('address', $addressColumns, $values);
+        $this->db->insertQuery('address', self::ADDRESS_COLUMNS, $values);
 
         $selectQuery = 'SELECT id FROM address WHERE ';
-        foreach ($addressColumns as $column)
+        foreach (self::ADDRESS_COLUMNS as $column)
             $selectQuery .= "$column = :$column and ";
         $selectQuery = substr($selectQuery, 0, strlen($selectQuery) - 5);
 
-        $rowStmt = $this->db->executeQuery($selectQuery, $values);
+        $rowStmt = $this->db->executeQuery($selectQuery,
+                           array('country'      => $values['country'],
+                                 'county'       => $values['county'],
+                                 'city'         => $values['city'],
+                                 'addressLine1' => $values['addressLine1'],
+                                 'addressLine2' => $values['addressLine2'],
+                                 'postCode'     => $values['postCode']));
 
         $retVal = $rowStmt->fetch(PDO::FETCH_ASSOC)['id'];
         return (int)$retVal;
+    }
+
+    private function checkUserAndAddr($values) {
+        if ($this->db->exists('users', array('email'), array('email' => $values['email'])))
+            return self::EMAIL_ALREADY_EXISTS;
+        else if ($this->db->exists('users', array('nickname'), array('nickname' => $values['nickname'])))
+            return self::NICKNAME_ALREADY_EXISTS;
+        else if ($this->db->exists('address', self::ADDRESS_COLUMNS, $values))
+            return self::ADDRESS_ALREADY_EXISTS;
+        else
+            return false;
     }
 
     private function insertUser($values) {
         $userColumns = array('nickname', 'surname', 'firstName', 'middleName',
                              'title', 'email', 'password', 'phone');
 
-        if (self::exists('users', array('email'), array('email' => $values['email'])))
-            return self::EMAIL_ALREADY_EXISTS;
-        if (self::exists('users', array('nickname'), array('nickname' => $values['nickname'])))
-            return self::NICKNAME_ALREADY_EXISTS;
-
-        $values = self::unsetNonExistent($values, $userColumns);
 //        $values['password'] = $this->create_hash($values['password']);
 
         $this->db->insertQuery('users', $userColumns, $values);
@@ -204,6 +193,9 @@ class RegisterModel extends HashModel {
     }
 
     private function process($formArray) {
+        $error = $this->checkUserAndAddr($formArray);
+        if ($error !== false)
+            return $error;
         $addressId = self::insertAddress($formArray);
         if (is_string($addressId))
             return $addressId;
