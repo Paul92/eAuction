@@ -1,6 +1,7 @@
 <?php
 
 define("ROOT_URL", "http://localhost");
+define("ROOT_DIR", "/home/paul/git/eauction");
 
 define("DB_HOST", "localhost");
 define("DB_TYPE", "mysql");
