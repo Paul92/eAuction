@@ -37,6 +37,7 @@ class LoginModel extends HashModel {
                 $hash = $array['password'];
                 if (/*$this->validate_password($password, $hash)*/ $password==$hash) {
                     Session::set('loggedIn', true);
+                    Session::set('userId', $array['id']);
                     header('location: ../index');
                 } else {
                     $errors[] = self::WRONG_USER_OR_PASS;
