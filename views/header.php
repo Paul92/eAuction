@@ -21,8 +21,8 @@
     .blue{
       background-color: #0000FF;
     }
-    .color-red{
-      color: #FF0000;
+    .red{
+      background-color: #FF0000;
     }
   /* Fix alignment issue of label on extra small devices in Bootstrap 3.2 */
     .form-horizontal .control-label{
@@ -54,10 +54,6 @@
 html,body{
     height: 100%;
     width: 100%;
-}
-
-#header{
-    height: 50px;
 }
 
 #wrapper {
