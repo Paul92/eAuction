@@ -11,6 +11,10 @@
     <link rel="stylesheet" href="<?php echo ROOT_URL;?>/public/css/jquery.fileupload-ui.css">
     <link rel="stylesheet" type="text/css" href="<?php echo ROOT_URL;?>/public/css/slider.css">
 
+    <link href="<?php echo ROOT_URL;?>/imageViewer/PhotoSwipe/_site/site-assets/site.css?v=4.0.6-1.0.4" rel="stylesheet" />
+    <link href="<?php echo ROOT_URL;?>/imageViewer/PhotoSwipe/dist/photoswipe.css?v=4.0.6-1.0.4" rel="stylesheet" />
+    <link href="<?php echo ROOT_URL;?>/imageViewer/PhotoSwipe/dist/default-skin/default-skin.css?v=4.0.6-1.0.4" rel="stylesheet" />
+
 <style type="text/css">
     .bs-example{
       margin: 20px;
@@ -66,7 +70,13 @@ html,body{
     position: relative;
     clear:both;
 }
-
+.desc {
+    margin-left: -20px;
+    margin-right: -10px;
+}
+.noLeft {
+    margin-left: -30px;
+}
 </style>
   </head>
   <body>

@@ -2,11 +2,11 @@
 
 class IndexModel extends Model {
 
-    function __construct() {
+    public function __construct() {
         parent::__construct();
     }
 
-    function getCategories() {
+    public function getCategories() {
         $query = 'SELECT category.name AS category,
                          COUNT(item.name) AS noOfItems,
                          category.id
@@ -18,7 +18,7 @@ class IndexModel extends Model {
         return $array;
     }
 
-    function getFeaturedImages() {
+    public function getFeaturedImages() {
         $query = 'SELECT filePath FROM image INNER JOIN item
                   ON image.itemId = item.id
                   AND item.featured = 1 AND image.main = 1
@@ -27,10 +27,12 @@ class IndexModel extends Model {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    function getNewestItems($category = null, $wordList = null) {
+    public function getNewestItems($category = null, $wordList = null) {
         $query = 'SELECT item.id,
                          item.name,
-                         item.description,
+                         IF (LENGTH(item.description) > 225,
+                             CONCAT(LEFT(item.description, 225), "..."),
+                             item.description) AS description,
                          auctionType.name AS auctionType,
                          (CURDATE() >= item.endDate) AS finished,
                          image.filePath AS mainPicture,
@@ -38,7 +40,8 @@ class IndexModel extends Model {
                   FROM item
                   INNER JOIN image ON item.id = image.itemId
                                   AND image.main = 1
-                  INNER JOIN auctionType ON auctionType.id = item.auctionType';
+                  INNER JOIN auctionType ON
+                             auctionType.id = item.auctionType';
         if ($category != null)
             $query .= ' WHERE item.categoryId = ' . $category;
         if ($wordList != null && !empty($wordList)) {
@@ -48,9 +51,7 @@ class IndexModel extends Model {
                             item.description LIKE '%$word%' AND";
             $query = substr($query, 0, -4);
         }
-        $query .= ' ORDER BY item.id limit 9';
-        echo $query;
-
+        $query .= ' ORDER BY item.id DESC LIMIT 9';
         $stmt = $this->db->executeQuery($query);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }

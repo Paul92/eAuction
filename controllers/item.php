@@ -12,11 +12,17 @@ class Item extends Controller {
         $mainImage = $this->model->getMainImage($itemId);
         $this->view->render('item/index', array('item' => $itemData,
                                                 'mainImage' => $mainImage,
+                                                'images' => $images,
                                                 'error' => $error));
     }
 
     function bid($itemId) {
-        $error = $this->model->newBid();
+        $error = false;
+        if ($_POST['auctionType'] == 5 || $_POST['auctionType'] == 2) {
+            // SELL
+        } else {
+            $error = $this->model->newBid();
+        }
         if ($error !== true)
             $this->item($itemId, $error);
         else

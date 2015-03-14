@@ -26,7 +26,11 @@ class NewAuctionModel extends Model {
     }
 
     private function generateName($destDir, $fileName) {
-        return $destDir . '/' . Session::get('itemId') . '_' . $fileName;
+        $slashIndex = strpos($fileName, '/');
+        if ($slashIndex !== false)
+            return $destDir . '/' . substr_replace($fileName, '/'.Session::get('itemId') . '_', $slashIndex, 1);
+        else
+            return $destDir . '/' . Session::get('itemId') . '_' . $fileName;
     }
 
     private function moveAllFilesToPermanentStorage($sourceDir,
@@ -37,21 +41,32 @@ class NewAuctionModel extends Model {
             $filePath = "$sourceDir/$file";
             if (!is_dir($filePath)) {
                 $newName = $this->generateName($destDir, $file);
+                $newThumbnailName = $this->generateName($destDir . '/thumbnail',
+                                                        $file);
+                list($fileWidth, $fileHeight) = getimagesize('files/'.$file);
+                list($thumbWidth, $thumbHeight) = getimagesize('files/thumbnail/' . $file);
+                $fileSize = $fileWidth . 'x' . $fileHeight;
+                $thumbSize = $thumbWidth . 'x' . $thumbHeight;
                 if ($insertDb) {
                     $main = isset($_POST['main']) && $_POST['main'] == $file;
-                    $this->createDbEntry($newName, $main);
+                    $this->createDbEntry($newName, $main, $newThumbnailName,
+                                         $fileSize, $thumbSize);
                 }
                 rename($filePath, $newName);
+                rename($sourceDir . '/thumbnail/' . $file, $newThumbnailName);
             }
         }
     }
 
-    private function createDbEntry($path, $main) {
-        $query = 'INSERT INTO image (filePath, itemId, main)
-                  VALUES (:path, :id, :main)';
-        $this->db->executeQuery($query, array('path' => $path,
-                                                'id' => Session::get('itemId'),
-                                              'main' => $main));
+    private function createDbEntry($filePath, $main, $thumbnailPath, $fileSize, $thumbSize) {
+        $query = 'INSERT INTO image (filePath, itemId, main, size, thumbnailPath, thumbnailSize)
+                  VALUES (:path, :id, :main, :size, :thumbnailPath, :thumbnailSize)';
+        $this->db->executeQuery($query, array('path' => $filePath,
+                                              'id' => Session::get('itemId'),
+                                              'main' => $main,
+                                              'size' => $fileSize,
+                                              'thumbnailPath' => $thumbnailPath,
+                                              'thumbnailSize' => $thumbSize));
     }
 
     public function getCategories() {
@@ -69,8 +84,6 @@ class NewAuctionModel extends Model {
         if ($num_files != 0) {
             $this->moveAllFilesToPermanentStorage($sourceDir,
                                                  'permanentStorage', true);
-            $this->moveAllFilesToPermanentStorage("$sourceDir/thumbnail",
-                                                 'permanentStorage/thumbnail');
         }
         if (Session::exists('itemId'))
             Session::remove('itemId');
@@ -131,11 +144,11 @@ class NewAuctionModel extends Model {
             else {
                 $query = 'INSERT INTO item (name, description, sellerId,
                                             categoryId, auctionType, endDate,
-                                            startPrice, featured)
+                                            startPrice, featured, startDate)
                           VALUES (:name, :description, :sellerId,
                                   :category, :auctionType,
                                   DATE_ADD(CURDATE(), INTERVAL :duration DAY),
-                                  :startPrice, :featured)';
+                                  :startPrice, :featured, CURDATE())';
 
                 $this->db->executeQuery($query, $formArray);
 

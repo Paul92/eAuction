@@ -31,17 +31,34 @@ class ItemModel extends Model {
 
         $stmt  = $this->db->executeQuery($query);
         $array = $stmt->fetchAll(PDO::FETCH_ASSOC)[0];
-        $array['maxBid'] = $this->getMaxValue($array['id']);
-        var_dump($array);
-
+        if ($array['auctionTypeId'] == 1)
+            $array['maxBid'] = $this->getMaxValue($array['id']);
+        else if ($array['auctionTypeId'] == 2 && $array['finished'] == 0) {
+            $array['currentPrice'] = $this->getDutchPrice($itemId);
+        }
         return $array;
     }
 
+    private function getDutchPrice($itemId) {
+        $query = 'SELECT startPrice - ROUND(CAST(CURDATE() - startDate AS INT)
+                         * 2 * startPrice / 100) AS currentPrice
+                  FROM item WHERE id = :id';
+        $stmt = $this->db->executeQuery($query, array('id' => $itemId));
+        $array = $stmt->fetchAll(PDO::FETCH_ASSOC)[0];
+        return $array['currentPrice'];
+    }
+
     public function getImages($itemId) {
-        $query = 'SELECT image.filePath
+        $query = 'SELECT image.filePath,
+                         image.size,
+                         image.main,
+                         image.thumbnailPath,
+                         image.thumbnailSize
                   FROM  image
-                  INNER JOIN item ON item.id = image.itemId';
-        $stmt  = $this->db->executeQuery($query);
+                  INNER JOIN item ON item.id = image.itemId
+                  WHERE item.id = :id
+                  LIMIT 5';
+        $stmt  = $this->db->executeQuery($query, array('id' => $itemId));
         $array = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $array;
     }
@@ -85,11 +102,6 @@ class ItemModel extends Model {
                 return false;
             else
                 return true;
-        } else if ($auctionType == 2) {
-//            if ($value > $startPrice || $value >= $this->getMinValue($itemId))
-//                return false;
-//            else
-//                return true;
         } else if ($auctionType == 3 || $auctionType == 4) {
             if ($value > $startPrice)
                 return false;
@@ -100,7 +112,6 @@ class ItemModel extends Model {
     }
 
     public function newBid() {
-        var_dump($_POST);
         if (!isset($_POST['bidValue']) || empty($_POST['bidValue']))
             return self::NO_BID;
         else if (!$this->checkIfBidPossible())
