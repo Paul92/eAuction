@@ -21,17 +21,14 @@ class NewAuction extends Controller {
             $arr['category'] = $this->model->getCategories();
             $this->view->render('newAuction/index', $arr);
         } else if ($arr['formArray']['featured']) {
-            header('Location: /newAuction/featuredPayment');
+            $this->model->makeFeaturedPayment();
         } else {
             header('Location: /newAuction/uploadPictures');
         }
     }
 
-    function featuredPayment() {
-        $this->view->render('newAuction/featuredPayment');
-    }
-
     function runFeaturedPayment() {
+        $this->model->receiveFeaturedPayment();
         header('Location: /newAuction/uploadPictures');
     }
 

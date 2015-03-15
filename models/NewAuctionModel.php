@@ -160,11 +160,197 @@ class NewAuctionModel extends Model {
 
                 $itemId = $stmt->fetch(PDO::FETCH_ASSOC)['id'];
                 Session::set('itemId', $itemId);
+                Session::set('itemName', $formArray['name']);
             }
         }
 
         return array('errors' => $errors, 'formArray' => $formArray);
         //header('Location: index');
     }
-}
 
+    public function receiveFeaturedPayment() {
+        require("config/config.php");
+        require("libs/paypal.class.php");
+        require("vendor/autoload.php");
+        //Paypal redirects back to this page using ReturnURL, We should receive TOKEN and Payer ID
+        if(isset($_GET["token"]) && isset($_GET["PayerID"]))
+        {
+            //we will be using these two variables to execute the "DoExpressCheckoutPayment"
+            //Note: we haven't received any payment yet.
+            
+            $token = $_GET["token"];
+            $payer_id = $_GET["PayerID"];
+            
+            //get session variables
+            $ItemName           = $_SESSION['ItemName']; //Item Name
+            $ItemPrice          = $_SESSION['ItemPrice'] ; //Item Price
+            $ItemID             = $_SESSION['ItemNumber']; //Item ID
+            $ItemDesc           = $_SESSION['ItemDesc']; //Item ID
+            $ItemQty            = $_SESSION['ItemQty']; // Item Quantity
+            $GrandTotal         = $_SESSION['GrandTotal'];
+            $ItemTotalPrice     = $_SESSION['GrandTotal'];
+        
+            $padata =   '&TOKEN='.urlencode($token).
+                        '&PAYERID='.urlencode($payer_id).
+                        '&PAYMENTREQUEST_0_PAYMENTACTION='.urlencode("SALE").
+                        
+                        //set item info here, otherwise we won't see product details later  
+                        '&L_PAYMENTREQUEST_0_NAME0='.urlencode($ItemName).
+                        '&L_PAYMENTREQUEST_0_NUMBER0='.urlencode($ItemID).
+                        '&L_PAYMENTREQUEST_0_DESC0='.urlencode($ItemDesc).
+                        '&L_PAYMENTREQUEST_0_AMT0='.urlencode($ItemPrice).
+                        '&L_PAYMENTREQUEST_0_QTY0='. urlencode($ItemQty).
+        
+        
+                        '&PAYMENTREQUEST_0_ITEMAMT='.urlencode($ItemTotalPrice).
+                        '&PAYMENTREQUEST_0_AMT='.urlencode($GrandTotal).
+                        '&PAYMENTREQUEST_0_CURRENCYCODE='.urlencode($PayPalCurrencyCode);
+            
+            //We need to execute the "DoExpressCheckoutPayment" at this point to Receive payment from user.
+            $paypal= new MyPayPal();
+            $httpParsedResponseAr = $paypal->PPHttpPost('DoExpressCheckoutPayment', $padata, $PayPalApiUsername, $PayPalApiPassword, $PayPalApiSignature, $PayPalMode);
+            
+            //Check if everything went ok..
+            if("SUCCESS" == strtoupper($httpParsedResponseAr["ACK"]) || "SUCCESSWITHWARNING" == strtoupper($httpParsedResponseAr["ACK"])) 
+            {
+                    $transactionID = urldecode($httpParsedResponseAr["PAYMENTINFO_0_TRANSACTIONID"]);
+                    
+                        /*
+                        //Sometimes Payment are kept pending even when transaction is complete. 
+                        //hence we need to notify user about it and ask him manually approve the transiction
+                        */
+                        
+                        if('Completed' == $httpParsedResponseAr["PAYMENTINFO_0_PAYMENTSTATUS"])
+                        {
+                            echo '<div style="color:green">Payment Received! Your product will be sent to you very soon!</div>';
+                        }
+                        elseif('Pending' == $httpParsedResponseAr["PAYMENTINFO_0_PAYMENTSTATUS"])
+                        {
+                            echo '<div style="color:red">Transaction Complete, but payment is still pending! '.
+                            'You need to manually authorize this payment in your <a target="_new" href="http://www.paypal.com">Paypal Account</a></div>';
+                        }
+        
+                        // we can retrieve transaction details using either GetTransactionDetails or GetExpressCheckoutDetails
+                        // GetTransactionDetails requires a Transaction ID, and GetExpressCheckoutDetails requires Token returned by SetExpressCheckOut
+                        $padata =   '&TOKEN='.urlencode($token);
+                        $paypal= new MyPayPal();
+                        $httpParsedResponseAr = $paypal->PPHttpPost('GetExpressCheckoutDetails', $padata, $PayPalApiUsername, $PayPalApiPassword, $PayPalApiSignature, $PayPalMode);
+        
+                        if("SUCCESS" == strtoupper($httpParsedResponseAr["ACK"]) || "SUCCESSWITHWARNING" == strtoupper($httpParsedResponseAr["ACK"])) 
+                        {
+        
+                            /*
+                            #### SAVE BUYER INFORMATION IN DATABASE ###
+                            
+                            
+                            */
+        
+                            $query = 'INSERT INTO payment
+                                             (transactionId, token, userId,
+                                              itemName, paymentDescription,
+                                              itemPrice, grandTotal, time)
+                                      VALUES (:transactionId, :token, :userId,
+                                              :itemName, :paymentDesc,
+                                              :itemPrice, :grandTotal, NOW())';
+                            $this->db->executeQuery($query,
+                                array('transactionId' => $transactionID,
+                                      'token' => $token,
+                                      'userId' => Session::get('userId'),
+                                      'itemName' => $ItemName,
+                                      'itemPrice' => $ItemTotalPrice,
+                                      'paymentDesc' => $ItemDesc,
+                                      'grandTotal' => $GrandTotal));
+                            echo '<pre>';
+                            print_r($httpParsedResponseAr);
+                            echo '</pre>';
+                        } else  {
+                            echo '<div style="color:red"><b>GetTransactionDetails failed:</b>'.urldecode($httpParsedResponseAr["L_LONGMESSAGE0"]).'</div>';
+                            echo '<pre>';
+                            print_r($httpParsedResponseAr);
+                            echo '</pre>';
+        
+                        }
+            
+            }else{
+                    echo '<div style="color:red"><b>Error : </b>'.urldecode($httpParsedResponseAr["L_LONGMESSAGE0"]).'</div>';
+                    echo '<pre>';
+                    print_r($httpParsedResponseAr);
+                    echo '</pre>';
+            }
+        }
+    }
+
+    public function makeFeaturedPayment() {
+        require("config/config.php");
+        require("libs/paypal.class.php");
+        require("vendor/autoload.php");
+        
+        $paypalmode = ($PayPalMode=='sandbox') ? '.sandbox' : '';
+        
+            $ItemName       = "Featured payment";
+            $ItemPrice      = 10;
+        	  $ItemDesc       = "Featured payment for " . Session::get('itemName');
+            $ItemID         = Session::get('itemId'); //Item ID
+            $ItemQty        = 1; // Item Quantity
+            
+            $ItemTotalPrice = ($ItemPrice); 
+            $PayPalReturnURL = 'http://localhost/newAuction/runFeaturedPayment';
+        
+            //Grand total including all tax, insurance, shipping cost and discount
+            $GrandTotal = ($ItemTotalPrice);
+            //Parameters for SetExpressCheckout, which will be sent to PayPal
+            $padata =   '&METHOD=SetExpressCheckout'.
+                        '&RETURNURL='.urlencode($PayPalReturnURL ).
+                        '&CANCELURL='.urlencode($PayPalCancelURL).
+                        '&PAYMENTREQUEST_0_PAYMENTACTION='.urlencode("SALE").
+                        
+                        '&L_PAYMENTREQUEST_0_NAME0='.urlencode($ItemName).
+                        '&L_PAYMENTREQUEST_0_NUMBER0='.urlencode($ItemID).
+                        '&L_PAYMENTREQUEST_0_DESC0='.urlencode($ItemDesc).
+                        '&L_PAYMENTREQUEST_0_AMT0='.urlencode($ItemPrice).
+                        '&L_PAYMENTREQUEST_0_QTY0='. urlencode($ItemQty).
+                       
+                        
+                        '&NOSHIPPING=1'. //set 1 to hide buyer's shipping address, in-case products that do not require shipping
+                        
+                        '&PAYMENTREQUEST_0_ITEMAMT='.urlencode($ItemTotalPrice).
+                        '&PAYMENTREQUEST_0_AMT='.urlencode($GrandTotal).
+                        '&PAYMENTREQUEST_0_CURRENCYCODE='.urlencode($PayPalCurrencyCode).
+                        '&LOCALECODE=GB'. //PayPal pages to match the language on your website.
+                        '&LOGOIMG=http://www.sanwebe.com/wp-content/themes/sanwebe/img/logo.png'. //site logo
+                        '&CARTBORDERCOLOR=FFFFFF'. //border color of cart
+                        '&ALLOWNOTE=1';
+                        
+                        ############# set session variable we need later for "DoExpressCheckoutPayment" #######
+                        $_SESSION['ItemName']           =  $ItemName; //Item Name
+                        $_SESSION['ItemPrice']          =  $ItemPrice; //Item Price
+                        $_SESSION['ItemNumber']         =  $ItemID; //Item ID
+                        $_SESSION['ItemDesc']           =  $ItemDesc; //Item description
+                        $_SESSION['ItemQty']            =  $ItemQty; // Item Quantity
+                        $_SESSION['ItemTotalPrice']     =  $ItemTotalPrice; //total amount of product; 
+                        $_SESSION['GrandTotal']         =  $GrandTotal;
+        
+                        echo $padata;
+                //We need to execute the "SetExpressCheckOut" method to obtain paypal token
+                $paypal= new MyPayPal();
+                
+                $httpParsedResponseAr = $paypal->PPHttpPost('SetExpressCheckout', $padata, $PayPalApiUsername, $PayPalApiPassword, $PayPalApiSignature, $PayPalMode);
+                //Respond according to message we receive from Paypal
+                echo "redirecting...";
+                if("SUCCESS" == strtoupper($httpParsedResponseAr["ACK"]) || "SUCCESSWITHWARNING" == strtoupper($httpParsedResponseAr["ACK"]))
+                {
+                        
+                        //Redirect user to PayPal store with Token received.
+                        $paypalurl ='https://www'.$paypalmode.'.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token='.$httpParsedResponseAr["TOKEN"].'';
+                        header('Location: '.$paypalurl);
+                     
+                }else{
+                    //Show error message
+                    echo '<div style="color:red"><b>Error : </b>'.urldecode($httpParsedResponseAr["L_LONGMESSAGE0"]).'</div>';
+                    echo '<pre>';
+                    print_r($httpParsedResponseAr);
+                    echo '</pre>';
+                }
+    }
+}
+?>
