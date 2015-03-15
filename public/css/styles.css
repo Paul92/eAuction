@@ -27,10 +27,12 @@
 @media (max-width: 1120px) and (min-width: 768px) {
     #sidebar{
         width: 200px;
-
     }
     #cont{
        margin-left: 220px;
+    }
+    #cont2{
+        margin-left:50px;
     }
 }
 
@@ -46,6 +48,9 @@
     }
     #cont{
        margin-left: 320px;
+    }
+    #cont2{
+       margin-left: 120px;
     }
 }
 
@@ -72,15 +77,24 @@
     #thumbnailsRow {
         margin-left:120px;
     }
+    #cont2{
+        margin-left:140px;
+    }
 }
 @media (max-width: 890px) {
     #thumbnailsRow {
         margin-left:180px;
     }
+    #cont2{
+        margin-left:100px;
+    }
 }
 @media (max-width: 840px) {
     #thumbnailsRow {
         margin-left:220px;
+    }
+    #cont2{
+        margin-left:40px;
     }
 }
 @media (max-width: 768px) {
