@@ -34,8 +34,10 @@ class Dashboard extends Controller {
                            'thisUser' => $userId == Session::get('userId')));
     }
 
-    public function paymentHistory($userId) {
-        $this->view->render('dashboard/paymentHistory');
+    public function paymentHistory() {
+        $payments = $this->model->getPaymentHistory();
+        $this->view->render('dashboard/paymentHistory',
+                            array('payments' => $payments));
     }
 
     public function logout() {

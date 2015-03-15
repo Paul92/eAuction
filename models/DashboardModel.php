@@ -40,4 +40,14 @@ class DashboardModel extends Model {
         return $array;
     }
 
+    public function getPaymentHistory() {
+        $query = 'SELECT transactionId, itemName, paymentDescription,
+                         itemPrice, grandTotal, time
+                  FROM payment
+                  WHERE userId = 1';
+        $stmt = $this->db->executeQuery($query,
+                                        array('id' => Session::get('userId')));
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
 }
