@@ -13,12 +13,12 @@
     <ul class="nav nav-justified">
      <?php if (isset($userId) && $userId == Session::get('userId')): ?>
       <li><a href="<?php echo ROOT_URL;?>/dashboard/editProfile">Edit profile</a></li>
+      <li><a href="<?php echo ROOT_URL;?>/dashboard/paymentHistory/<?php echo $userId;?>">Payment History</a></li>
      <?php else:?>
       <li><a href="<?php echo ROOT_URL;?>/dashboard/viewProfile">View profile</a></li>
      <?php $userId = Session::get('userId'); endif;?>
       <li><a href="<?php echo ROOT_URL;?>/dashboard/bidHistory/<?php echo $userId;?>">Bid History</a></li>
       <li><a href="<?php echo ROOT_URL;?>/dashboard/openedAuctions/<?php echo $userId;?>">Opened Auctions</a></li>
-      <li><a href="<?php echo ROOT_URL;?>/dashboard/paymentHistory/<?php echo $userId;?>">Payment History</a></li>
     </ul>
   </div>
 </nav>
