@@ -24,20 +24,21 @@ class Dashboard extends Controller {
         $bidHistory = $this->model->getBidHistory($userId);
         $this->view->render('dashboard/bidHistory',
                      array('bids' => $bidHistory,
-                           'thisUser' => $userId == Session::get('userId')));
+                           'userId' => $userId));
     }
 
     public function openedAuctions($userId) {
         $auctionHistory = $this->model->getAuctionHistory($userId);
         $this->view->render('dashboard/openedAuctions',
                      array('auctions' => $auctionHistory,
-                           'thisUser' => $userId == Session::get('userId')));
+                           'userId' => $userId));
     }
 
-    public function paymentHistory() {
+    public function paymentHistory($userId) {
         $payments = $this->model->getPaymentHistory();
         $this->view->render('dashboard/paymentHistory',
-                            array('payments' => $payments));
+                            array('payments' => $payments,
+                                  'userId' => $userId));
     }
 
     public function logout() {
