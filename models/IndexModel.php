@@ -51,8 +51,9 @@ class IndexModel extends Model {
                             item.description LIKE '%$word%' AND";
             $query = substr($query, 0, -4);
         }
-        $query .= ' ORDER BY item.id DESC LIMIT 9';
+        $query .= ' ORDER BY item.id DESC';
         $stmt = $this->db->executeQuery($query);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $array = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $array;
     }
 }
