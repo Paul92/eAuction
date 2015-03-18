@@ -38,13 +38,14 @@ class LoginModel extends HashModel {
                 if (/*$this->validate_password($password, $hash)*/ $password==$hash) {
                     Session::set('loggedIn', true);
                     Session::set('userId', $array['id']);
+                    $this->generateWonAuction($array['id']);
                     header('location: ../index');
                 } else {
                     $errors[] = self::WRONG_USER_OR_PASS;
                 }
             }
         }
-        if (empty($errors))
+        if (!empty($errors))
             return(array('errors' => $errors,
                          'formArray' => array('password' => $password,
                                               'login' => $login)));
@@ -52,8 +53,60 @@ class LoginModel extends HashModel {
             return(array('errors' => $errors));
     }
 
-    private function validate_password($password, $correct_hash)
-    {
+    private function generateWonAuction($userId) {
+        $this->generateWonEnglishAuction($userId);
+        $this->generateWonVickeryAuction($userId);
+        $this->setNoOfWonAuctionsCookie($userId);
+    }
+
+    private function setNoOfWonAuctionsCookie($userId) {
+        $query = 'SELECT COUNT(*) AS noOfAuctions FROM wonAuctions
+                  WHERE userId = :id AND payed = false';
+        $stmt = $this->db->executeQuery($query, array('id' => $userId));
+        $noOfAuctions = $stmt->fetchAll(PDO::FETCH_ASSOC)[0]['noOfAuctions'];
+        Session::set('noOfAuctions', $noOfAuctions);
+    }
+
+    private function generateWonEnglishAuction($userId) {
+        $query = 'INSERT INTO wonAuctions
+                  SELECT item.id AS itemId,
+                         bid.bidderId AS userId,
+                         bid.value AS value,
+                         false,
+                         item.endDate
+                  FROM item
+                  INNER JOIN bid ON item.id = bid.itemId
+                  INNER JOIN
+                        (SELECT itemId, MAX(value) AS value
+                         FROM bid GROUP BY itemId) maxValues
+                  ON maxValues.itemId = item.id
+                  WHERE bid.bidderId = :id
+                    AND bid.value = maxValues.value
+                    AND item.endDate <= CURDATE()
+                    AND (item.auctionType = 1 OR item.auctionType = 3)
+                    AND item.id NOT IN
+                        (SELECT itemId FROM wonAuctions WHERE
+                                userId = bid.bidderId)';
+        $this->db->executeQuery($query, array('id' => $userId));
+    }
+    private function generateWonVickeryAuction($userId) {
+        $query = 'SELECT item.id AS itemId,
+                         bid.bidderId AS userId,
+                         bid.value AS value,
+                         false,
+                         item.endDate
+                  FROM item
+                  INNER JOIN bid ON item.id = bid.itemId
+                  WHERE bid.bidderId = :id
+                    AND item.endDate <= CURDATE()
+                    AND item.auctionType = 2
+                  ORDER BY bid.value DESC
+                  LIMIT 1
+                  OFFSET 1';
+        $this->db->executeQuery($query, array('id' => $userId));
+    }
+
+    private function validate_password($password, $correct_hash) {
         $params = explode(":", $correct_hash);
         if(count($params) < HASH_SECTIONS)
            return false;
