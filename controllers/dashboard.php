@@ -41,6 +41,13 @@ class Dashboard extends Controller {
                                   'userId' => $userId));
     }
 
+    public function wonAuctions($userId) {
+        $wonAuctions = $this->model->getWonAuctions();
+        $this->view->render('dashboard/wonAuctions',
+                            array('wonAuctions' => $wonAuctions,
+                                  'userId' => $userId));
+    }
+
     public function logout() {
         Session::remove('loggedIn');
         header('location: ../index');
