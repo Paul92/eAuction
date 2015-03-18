@@ -14,6 +14,7 @@
      <?php if (isset($userId) && $userId == Session::get('userId')): ?>
       <li><a href="<?php echo ROOT_URL;?>/dashboard/editProfile">Edit profile</a></li>
       <li><a href="<?php echo ROOT_URL;?>/dashboard/paymentHistory/<?php echo $userId;?>">Payment History</a></li>
+      <li><a href="<?php echo ROOT_URL;?>/dashboard/wonAuctions/<?php echo $userId;?>">Won Auctions</a></li>
      <?php else:?>
       <li><a href="<?php echo ROOT_URL;?>/dashboard/viewProfile">View profile</a></li>
      <?php $userId = Session::get('userId'); endif;?>
