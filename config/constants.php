@@ -1,13 +1,15 @@
 <?php
 
+require('config.inc.php');
+
 define("ROOT_URL", "http://localhost");
 define("ROOT_DIR", "/home/paul/git/eauction");
 
-define("DB_HOST", "localhost");
+define("DB_HOST", $database_host);
 define("DB_TYPE", "mysql");
 define("DB_NAME", "2014_comp10120_y7");
-define("DB_USER", "root");
-define("DB_PASS", "");
+define("DB_USER", $database_user);
+define("DB_PASS", $database_pass);
 
 define("PBKDF2_HASH_ALGORITHM", "sha256");
 define("PBKDF2_ITERATIONS", 1000);
