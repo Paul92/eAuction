@@ -43,6 +43,9 @@
     padding-left: 0px;
     padding-right: 0px;
 }
+.top5 {
+  margin-top: 5px;
+}
 .top10 {
   margin-top: 10px;
 }
@@ -104,6 +107,7 @@ html,body{
             <li>
               <a href="<?php echo ROOT_URL;?>/dashboard">
                 <span class="glyphicon glyphicon-user"></span> Dashboard
+                <span class="badge"><?php echo Session::get('noOfAuctions');?></span>
               </a>
             </li>
             <li>
