@@ -10,6 +10,7 @@ class RegisterModel extends HashModel {
     const NO_SURNAME_MSG          = 'Please insert a surname.';
     const NO_FIRSTNAME_MSG        = 'Please insert a first name.';
     const NO_EMAIL_MSG            = 'Please insert an email.';
+    const NO_PAYPAL_EMAIL_MSG     = 'Please insert a PayPal email address.';
     const NO_PHONE_NUMBER_MSG     = 'Please insert a phone number.';
     const NO_CITY_MSG             = 'Please insert a city.';
     const NO_COUNTRY_MSG          = 'Please insert a country.';
@@ -17,6 +18,7 @@ class RegisterModel extends HashModel {
     const NO_ADDRESS_LINE1_MSG    = 'Please insert an address line.';
 
     const BAD_EMAIL_MSG           = 'Email address not valid.';
+    const BAD_PAYPAL_EMAIL_MSG    = 'PayPal email address not valid.';
     const PASSWORD_TOO_SHORT      = 'Please insert a password longer than 6.';
     const PASSWORD_NO_LETTERS     = 'The password must contain at least one letter';
     const PASSWORD_NO_DIGITS      = 'The password must contain at least one digit';
@@ -29,6 +31,7 @@ class RegisterModel extends HashModel {
     const ADDRESS_ALREADY_EXISTS  = 'This address is already registered. Please insert a new address.';
     const NICKNAME_ALREADY_EXISTS = 'This nickname is already in use. Please insert another nickname.';
     const EMAIL_ALREADY_EXISTS    = 'This email is already in use. Please insert another email.';
+    const PAYPAL_EMAIL_ALREADY_EXISTS = 'The PayPal email is already in use. Please insert another one.';
 
 
     const SUCESSFUL               = 'User succesfully created.';
@@ -103,6 +106,14 @@ class RegisterModel extends HashModel {
                 $registerErrors['email'] = self::BAD_EMAIL_MSG;
         }
 
+        if (!isset($_POST['paypalEmail']) || empty($_POST['paypalEmail']))
+            $registerErrors['paypalEmail'] = self::NO_PAYPAL_EMAIL_MSG;
+        else {
+            $formArray['paypalEmail'] = $_POST['paypalEmail'];
+            if(!filter_var($_POST['paypalEmail'], FILTER_VALIDATE_EMAIL))
+                $registerErrors['paypalEmail'] = self::BAD_PAYPAL_EMAIL_MSG;
+        }
+
         if (!isset($_POST['phone']) || empty($_POST['phone']))
             $registerErrors['phone'] = self::NO_PHONE_NUMBER_MSG;
         else {
@@ -174,6 +185,8 @@ class RegisterModel extends HashModel {
     private function checkUserAndAddr($values) {
         if ($this->db->exists('users', array('email'), array('email' => $values['email'])))
             return self::EMAIL_ALREADY_EXISTS;
+        else if ($this->db->exists('users', array('paypalEmail'), array('paypalEmail' => $values['paypalEmail'])))
+            return self::PAYPAL_EMAIL_ALREADY_EXISTS;
         else if ($this->db->exists('users', array('nickname'), array('nickname' => $values['nickname'])))
             return self::NICKNAME_ALREADY_EXISTS;
         else if ($this->db->exists('address', self::ADDRESS_COLUMNS, $values))

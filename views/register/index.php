@@ -29,10 +29,10 @@
                name="nickname" placeholder="Nickname" >
             </div>
           </div>
-            <div class="top10 col-sm-12 col-md-6">
+            <div class="top10 col-xs-12 col-md-6">
               <label for="input" class="col-sm-4 control-label">Surname</label>
-                <div class="input-group col-xs-12 col-md-8">
-                  <select name="title" id="title" class="form-control" style="margin-left: 3.5%; width: 20%;">
+                <div class="input-group col-xs-12 col-sm-8 col-md-8">
+                  <select name="title" id="title" class="form-control" style="margin-left: 3.5%; width: 25%;">
                     <option value="Mr." 
                     <?php if (isset($formArray['title']) 
                               && (empty($formArray['title']) || $formArray['title'] == 'Mr.'))
@@ -50,7 +50,7 @@
                     <?php if (isset($formArray['title']) && $formArray['title'] == 'Dr.') 
                                  echo 'selected="selected"';?>>Dr.</option>
                   </select>
-                <input type="text" class="form-control" style="width: 73%;" id="surname" value=
+                <input type="text" class="form-control" style="width: 67%;" id="surname" value=
                 "<?php if (isset($formArray['surname']))
                            echo $formArray['surname'];?>"
                   name="surname" placeholder="Surname">
@@ -184,6 +184,23 @@
             </div>
           </div>
         </div>
+        </br>
+        <div class="form-group top10">
+            <h4 class="col-xs-offset-1 lead">Payment details</h4>
+        </div>
+
+        <div class="form-group top10">
+          <div class="top10 col-sm-12">
+            <label for="paypalEmail" class="control-label col-md-2 col-sm-4">PayPal Email</label>
+            <div class="col-sm-8 col-md-10">
+                <input type="text" class="form-control" id="paypalEmail" value=
+                "<?php if (isset($formArray['paypalEmail']))
+                           echo $formArray['paypalEmail'];?>"
+                  name="paypalEmail" placeholder="PayPal Email">
+            </div>
+          </div>
+        </div>
+        
 
 
           <div class="form-group">
