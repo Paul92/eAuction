@@ -4,7 +4,6 @@
 </script>  
 
 <script>try{Typekit.load();}catch(e){}</script>
-<?php var_dump($images);?>
 <div class="container">
   <h1 class="page-header"> <?php
     echo $item['name'];
