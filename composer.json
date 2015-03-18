@@ -1,7 +1,11 @@
 {
-  "require": {
-    "php": ">=5.3",
-    "ext-curl": "*",
-    "paypal/adaptivepayments-sdk-php":"*"
+"require": {
+  "php": ">=5.3",
+  "ext-curl": "*",
+  "paypal/adaptivepayments-sdk-php":"*"
+},
+"autoload": {
+  "psr-0": {
   }
+}
 }
