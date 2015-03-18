@@ -50,4 +50,22 @@ class DashboardModel extends Model {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function getWonAuctions() {
+        $query = 'SELECT item.name,
+                         wonAuctions.itemId,
+                         wonAuctions.value,
+                         wonAuctions.payed,
+                         wonAuctions.date,
+                         3 - CURDATE() + wonAuctions.date AS daysRemaining,
+                         users.PayPalEmail AS sellerPayPalEmail
+                  FROM wonAuctions
+                  INNER JOIN item ON item.id = wonAuctions.itemId
+                  INNER JOIN users ON item.sellerId = users.id
+                  WHERE wonAuctions.userId = :id
+                  ORDER BY daysRemaining';
+        $stmt = $this->db->executeQuery($query,
+                                        array('id' => Session::get('userId')));
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
 }
