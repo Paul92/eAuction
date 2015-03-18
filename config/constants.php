@@ -2,8 +2,8 @@
 
 require('config.inc.php');
 
-define("ROOT_URL", "http://localhost");
-define("ROOT_DIR", "/home/paul/git/eauction");
+define("ROOT_URL", "https://web.cs.manchester.ac.uk/mbax4pg2/eauction/");
+define("ROOT_DIR", __DIR__);
 
 define("DB_HOST", $database_host);
 define("DB_TYPE", "mysql");
