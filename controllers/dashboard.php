@@ -48,6 +48,14 @@ class Dashboard extends Controller {
                                   'userId' => $userId));
     }
 
+    public function processPayment() {
+        require('libs/Payment.php');
+        var_dump($_POST);
+        $this->model->makePayment($_POST['itemId'], $_POST['itemName'],
+                                  $_POST['itemPrice'],
+                                  $_POST['sellerPayPalEmail']);
+    }
+
     public function logout() {
         Session::remove('loggedIn');
         header('location: ../index');
