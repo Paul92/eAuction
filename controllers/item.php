@@ -18,11 +18,15 @@ class Item extends Controller {
 
     function bid($itemId) {
         $error = false;
-        if ($_POST['auctionType'] == 5 || $_POST['auctionType'] == 2) {
-            // SELL
-        } else {
-            $error = $this->model->newBid();
-        }
+        $error = $this->model->newBid();
+        if ($error !== true)
+            $this->item($itemId, $error);
+        else
+            header('Location: ' . ROOT_URL . '/index/index/bid_created');
+    }
+
+    function buy($itemid) {
+        $error = $this->model->newBuy();
         if ($error !== true)
             $this->item($itemId, $error);
         else

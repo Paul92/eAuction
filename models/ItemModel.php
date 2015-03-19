@@ -128,4 +128,8 @@ class ItemModel extends Model {
             return true;
         }
     }
+
+    public function newBuy() {
+        var_dump($_POST);
+    }
 }
