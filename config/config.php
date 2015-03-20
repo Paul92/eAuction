@@ -1,7 +1,7 @@
 <?php
 $PayPalMode         = 'sandbox'; // sandbox or live
 $PayPalApiUsername  = 'hasman2008ukea1_api2.hotmail.co.uk'; //PayPal API Username
-$PayPalApiEmail     = 'hasman2008ukseller1@hotmail.co.uk';
+$PayPalApiEmail     = 'hasman2008ukea1@hotmail.co.uk';
 $PayPalApiPassword  = 'GLUEMD37ZRCGUDX5'; //Paypal API password
 $PayPalApiSignature = 'AiPC9BjkCyDFQXbSkoZcgqH3hpacAiJDSU1cTOPvMulWmlYVfjZvbSyD'; //Paypal API Signature
 $PayPalCurrencyCode = 'GBP'; //Paypal Currency Code
@@ -18,5 +18,5 @@ $feePercent = 0.1;
 $maxFee = 200;
 
 $paypalmode = ($PayPalMode=='sandbox') ? '.sandbox' : '';
-$PayPalReturnURL    = 'http://localhost/process2.php';
+$PayPalReturnURL    = 'http://localhost/processPayment/storeTransactionDetails';
 ?>
