@@ -30,7 +30,7 @@
             </div>
           </div>
             <div class="top10 col-xs-12 col-md-6">
-              <label for="input" class="col-sm-4 control-label">Surname</label>
+              <label for="surname" class="col-sm-4 control-label">Surname</label>
                 <div class="input-group col-xs-12 col-sm-8 col-md-8">
                   <select name="title" id="title" class="form-control" style="margin-left: 3.5%; width: 25%;">
                     <option value="Mr." 
@@ -184,7 +184,7 @@
             </div>
           </div>
         </div>
-        </br>
+        <br>
         <div class="form-group top10">
             <h4 class="col-xs-offset-1 lead">Payment details</h4>
         </div>
