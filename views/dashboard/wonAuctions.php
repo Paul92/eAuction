@@ -1,6 +1,9 @@
 <link rel="stylesheet" href="<?php echo ROOT_URL;?>/public/css/niceTable.css">
 <h1 class="page-header">Won Auctions</h1>
 <?php require('views/dashboard/index.php'); ?>
+<?php if (empty($wonAuctions)): ?>
+<div class="alert alert-warning top20" role="alert">This user has not won any auctions yet.</div>
+<?php else: ?>
 <div style="margin: 0 auto;" class="row">
 <table class="col-xs-12 col-md-offset-2 col-md-8">
   <thead>
@@ -20,15 +23,14 @@ foreach ($wonAuctions as $wonAuction) {
   echo '<td class="col-md-3 col-sm-3 col-xs-3">';
   echo '&pound; ' . $wonAuction['value'] . "</td>\n";
   echo '<td class="col-md-3 col-sm-3 col-xs-3">';
-  if ($wonAuction['daysRemaining'] < 0) {
-    if ($wonAuction['payed'] == 0)
+  if ($wonAuction['daysRemaining'] < 0 && $auction['payed'] == 0) {
       echo 'Your payment time has expired';
-    else
+  } else if ($wonAuction['payed'] == 1) 
       echo 'You payed for this item';
-  } else {
-  echo '<div>';
+  else {
+    echo '<div>';
     echo '<div class="top5 col-xs-4 col-md-6">';
-      echo $wonAuction['daysRemaining'];
+    echo $wonAuction['daysRemaining'];
     echo '</div>';
     echo '<form method="post" action="' . ROOT_URL;
     echo '/dashboard/processPayment">';
@@ -43,7 +45,7 @@ foreach ($wonAuctions as $wonAuction) {
     echo 'value="' . $wonAuction['sellerPayPalEmail'] . '">';
     echo 'Pay Now </button>';
     echo '</form>';
-  echo '</div>';
+    echo '</div>';
   }
   echo "</td>\n";
   echo "</tr>\n";
@@ -52,5 +54,5 @@ foreach ($wonAuctions as $wonAuction) {
 ?>
   </tbody>
 </table>
-  
+<?php endif; ?>
 </div>
