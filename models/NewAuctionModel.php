@@ -16,9 +16,6 @@ class NewAuctionModel extends Model {
                                   characters.';
     const DUPLICATE_ITEM = 'You have added this item already.';
 
-    const AUCTION_TYPES = array('englishAuction', 'dutchAuction',
-                                'englishAuctionHidden', 'vickeryAuction',
-                                'buyItNow');
     const NO_MAIN_PICTURE = 'Please choose a main picture.';
 
     function __construct() {
