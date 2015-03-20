@@ -1,7 +1,9 @@
 <link rel="stylesheet" href="<?php echo ROOT_URL;?>/public/css/niceTable.css">
 <h1 class="page-header">Bid History</h1>
 <?php require('views/dashboard/index.php');?>
-<br>
+<?php if (empty($bids)): ?>
+<div class="alert alert-warning top20" role="alert">This user has not bidded yet.</div>
+<?php else: ?>
 <div style="margin: 0 auto;" class="row">
 <table class="col-xs-12">
   <thead>
@@ -30,5 +32,5 @@ foreach ($bids as $bid) {
 ?>
   </tbody>
 </table>
-  
+<?php endif;?>
 </div>
