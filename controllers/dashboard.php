@@ -11,13 +11,16 @@ class Dashboard extends Controller {
     }
 
     public function editProfile($userId) {
+        $userData = $this->model->getProfileData($userId);
         $this->view->render('dashboard/editProfile',
-                            array('userId' => $userId));
+                            array('userId' => $userId,
+                                  'formArray' => $userData));
     }
 
     public function viewProfile($userId) {
-        $this->view->render('dashboard/viewProfile',
-                            array('userId' => $userId));
+        $this->editProfile($userId);
+//        $this->view->render('dashboard/editProfile',
+//                            array('userId' => $userId));
     }
 
     public function bidHistory($userId) {
@@ -49,15 +52,22 @@ class Dashboard extends Controller {
     }
 
     public function processPayment() {
-        require('libs/Payment.php');
-        var_dump($_POST);
         $this->model->makePayment($_POST['itemId'], $_POST['itemName'],
                                   $_POST['itemPrice'],
                                   $_POST['sellerPayPalEmail']);
     }
 
+    public function updateProfile($userId) {
+        $errors = $this->model->updateProfile($userId);
+        if (isset($arr['errors']) && !empty($arr['errors']))
+            $this->view->render('register/index', $arr);
+        else
+            header('Location: '.ROOT_URL.'/index/index/user_updated');
+    }
+
     public function logout() {
         Session::remove('loggedIn');
+        Session::remove('userId');
         header('location: ../index');
     }
 
