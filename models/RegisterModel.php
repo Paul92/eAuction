@@ -36,10 +36,6 @@ class RegisterModel extends HashModel {
 
     const SUCESSFUL               = 'User succesfully created.';
 
-    const ADDRESS_COLUMNS = array('country', 'county', 'city',
-                                  'addressLine1', 'addressLine2',
-                                  'postCode');
-
     public function __construct() {
         parent::__construct();
     }
@@ -162,11 +158,15 @@ class RegisterModel extends HashModel {
     }
 
     private function insertAddress($values) {
+        $ADDRESS_COLUMNS = array('country', 'county', 'city',
+                                 'addressLine1', 'addressLine2',
+                                 'postCode');
 
-        $this->db->insertQuery('address', self::ADDRESS_COLUMNS, $values);
+
+        $this->db->insertQuery('address', $ADDRESS_COLUMNS, $values);
 
         $selectQuery = 'SELECT id FROM address WHERE ';
-        foreach (self::ADDRESS_COLUMNS as $column)
+        foreach ($ADDRESS_COLUMNS as $column)
             $selectQuery .= "$column = :$column and ";
         $selectQuery = substr($selectQuery, 0, strlen($selectQuery) - 5);
 
@@ -189,7 +189,7 @@ class RegisterModel extends HashModel {
             return self::PAYPAL_EMAIL_ALREADY_EXISTS;
         else if ($this->db->exists('users', array('nickname'), array('nickname' => $values['nickname'])))
             return self::NICKNAME_ALREADY_EXISTS;
-        else if ($this->db->exists('address', self::ADDRESS_COLUMNS, $values))
+        else if ($this->db->exists('address', $ADDRESS_COLUMNS, $values))
             return self::ADDRESS_ALREADY_EXISTS;
         else
             return false;
@@ -197,7 +197,8 @@ class RegisterModel extends HashModel {
 
     private function insertUser($values) {
         $userColumns = array('nickname', 'surname', 'firstName', 'middleName',
-                             'title', 'email', 'password', 'phone');
+                             'title', 'email', 'password', 'phone', 'PayPalEmail');
+        $values['PayPalEmail'] = $values['paypalEmail'];
 
 //        $values['password'] = $this->create_hash($values['password']);
 
