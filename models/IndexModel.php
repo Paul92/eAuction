@@ -47,11 +47,11 @@ class IndexModel extends Model {
         if ($wordList != null && !empty($wordList)) {
             $query .= ' WHERE';
             foreach ($wordList as $word)
-                $query .= " item.name LIKE '%$word%' AND
-                            item.description LIKE '%$word%' AND";
+                $query .= " item.name LIKE '%$word%' OR 
+                            item.description LIKE '%$word%'  OR";
             $query = substr($query, 0, -4);
         }
-        $query .= ' ORDER BY item.id DESC';
+        $query .= ' ORDER BY finished ASC, item.endDate - CURDATE() ASC, item.id DESC';
         $stmt = $this->db->executeQuery($query);
         $array = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $array;
