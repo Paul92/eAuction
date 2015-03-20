@@ -90,7 +90,6 @@ class ItemModel extends Model {
     private function checkIfBidPossible() {
         $itemId      = $_POST['itemId'];
         $userId      = Session::get('userId');
-        $bidValue    = $_POST['bidValue'];
         $auctionType = $_POST['auctionType'];
         $value       = $_POST['bidValue'];
         $startPrice  = $_POST['startPrice'];

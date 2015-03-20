@@ -183,6 +183,12 @@
                         $item['auctionTypeId'] != 2): ?>
               <form class="form-horizontal" method="post"
                    action="<?php echo ROOT_URL . '/item/bid/' . $item['id'];?>">
+                <input type="hidden" name="itemId"
+                       value="<?php echo $item['sellerId']?>">
+                <input type="hidden" name="auctionType"
+                       value="<?php echo $item['auctionTypeId']?>">
+                <input type="hidden" name="startPrice"
+                       value="<?php echo $item['startPrice']?>">
                 <td> <label>Bid value (&pound;):</label> </td>
                 <td>
                 <input type="text" class="form-control"
