@@ -75,8 +75,6 @@
     </div>
 
     <div class="col-md-6 col-sm-12 col-xs-12">
-      <form class="form-horizontal" method="post"
-            action="<?php echo ROOT_URL . '/item/bid/' . $item['id'];?>">
         <input type="hidden" name="itemId" value="<?php echo $item['id'];?>">
         <input type="hidden" name="auctionType"
                value="<?php echo $item['auctionTypeId'];?>">
@@ -166,7 +164,7 @@
             </td>
             <td></td>
           </tr>
-          <?php elseif ($item['auctionTypeId'] == 2): ?>
+          <?php elseif ($item['auctionTypeId'] == 2 && $item['finished'] == 0): ?>
           <tr>
             <td>
               <label>Current price:</label>
@@ -183,6 +181,8 @@
           <tr>
               <?php if ($item['auctionTypeId'] != 5 &&
                         $item['auctionTypeId'] != 2): ?>
+              <form class="form-horizontal" method="post"
+                   action="<?php echo ROOT_URL . '/item/bid/' . $item['id'];?>">
                 <td> <label>Bid value (&pound;):</label> </td>
                 <td>
                 <input type="text" class="form-control"
@@ -193,19 +193,28 @@
                     Bid Now
                   </button>
                 </td>
+              </form>
               <?php else: ?>
+              <form class="form-horizontal" method="post"
+                   action="<?php echo ROOT_URL . '/item/buy/' . $item['id'];?>">
+                <input type="hidden" name="sellerId"
+                       value="<?php echo $item['sellerId']?>">
+                <input type="hidden" name="price"
+                       value="<?php echo $item['currentPrice']?>">
+                <input type="hidden" name="itemName"
+                       value="<?php echo $item['name']?>">
                 <td><td>
                 <td>
                   <button type="submit" class="btn btn-primary">
                     Buy Now
                   </button>
                 </td>
+              </form>
               <?php endif; ?>
             <td></td>
           </tr>
           <?php endif;?>
         </table>
-      </form>
     </div>
   </div>
   <div class="top10 row">
