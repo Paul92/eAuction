@@ -25,11 +25,11 @@ class Item extends Controller {
             header('Location: ' . ROOT_URL . '/index/index/bid_created');
     }
 
-    function buy($itemid) {
-        $error = $this->model->newBuy();
-        if ($error !== true)
-            $this->item($itemId, $error);
-        else
-            header('Location: ' . ROOT_URL . '/index/index/bid_created');
+    function buy($itemId) {
+        $error = $this->model->newBuy($itemId);
+        //if ($error !== true)
+        //    $this->item($itemId, $error);
+        //else
+        //    header('Location: ' . ROOT_URL . '/index/index/bid_created');
     }
 }
