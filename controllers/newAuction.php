@@ -11,7 +11,7 @@ class NewAuction extends Controller {
             $categories = $this->model->getCategories();
             $this->view->render('newAuction/index', array('category' => $categories));
         } else {
-            header('Location: /login');
+            header('Location: '. ROOT_URL . '/login');
         }
     }
 
@@ -23,18 +23,18 @@ class NewAuction extends Controller {
         } else if ($arr['formArray']['featured']) {
             $this->model->makeFeaturedPayment();
         } else {
-            header('Location: /newAuction/uploadPictures');
+            header('Location: ' . ROOT_URL . '/newAuction/uploadPictures');
         }
     }
 
     function runFeaturedPayment() {
         $this->model->receiveFeaturedPayment();
-        header('Location: /newAuction/uploadPictures');
+        header('Location: ' . ROOT_URL . '/newAuction/uploadPictures');
     }
 
     function uploadPictures() {
         if (!Session::exists('itemId')) {
-            header('Location: /index');
+            header('Location: '.ROOT_URL.'/index');
         } else {
             $this->view->render('newAuction/uploadPictures');
         }
