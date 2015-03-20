@@ -43,9 +43,9 @@ class UploadHandler
     function __construct($options = null, $initialize = true, $error_messages = null) {
         $this->response = array();
         $this->options = array(
-            'script_url' => 'http://localhost/newAuction/',
-            'upload_dir' => '/home/paul/git/eauction/files/',
-            'upload_url' => 'http://localhost/files/',
+            'script_url' => ROOT_URL . '/newAuction/',
+            'upload_dir' => ROOT_DIR . '/files/',
+            'upload_url' => ROOT_URL . '/files/',
             'user_dirs' => false,
             'mkdir_mode' => 0755,
             'param_name' => 'files',
