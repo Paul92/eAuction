@@ -183,6 +183,10 @@ class RegisterModel extends HashModel {
     }
 
     private function checkUserAndAddr($values) {
+        $ADDRESS_COLUMNS = array('country', 'county', 'city',
+                                 'addressLine1', 'addressLine2',
+                                 'postCode');
+
         if ($this->db->exists('users', array('email'), array('email' => $values['email'])))
             return self::EMAIL_ALREADY_EXISTS;
         else if ($this->db->exists('users', array('paypalEmail'), array('paypalEmail' => $values['paypalEmail'])))
