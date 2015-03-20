@@ -291,7 +291,7 @@ class NewAuctionModel extends Model {
             $ItemQty        = 1; // Item Quantity
             
             $ItemTotalPrice = ($ItemPrice); 
-            $PayPalReturnURL = 'http://localhost/newAuction/runFeaturedPayment';
+            $PayPalReturnURL = ROOT_URL . '/newAuction/runFeaturedPayment';
         
             //Grand total including all tax, insurance, shipping cost and discount
             $GrandTotal = ($ItemTotalPrice);
