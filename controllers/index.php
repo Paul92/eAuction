@@ -14,8 +14,12 @@ class Index extends Controller{
             $info = 'Your auction has been successfuly created.';
         if ($info == 'user_created')
             $info = 'Your user has been created. Please login.';
+        if ($info == 'user_updated')
+            $info = 'Your user has been updated.';
         if ($info == 'bid_created')
             $info = 'Your bid has been sucessfully inserted.';
+        if ($info == 'payment_successful')
+            $info = 'Your payment has been sucessfully processed.';
 
         $featuredImages = $this->model->getFeaturedImages();
         $this->view->render('index/index',
@@ -30,7 +34,6 @@ class Index extends Controller{
     }
 
     function search() {
-        var_dump($_POST);
         $categories = $this->model->getCategories();
         $items = $this->model->getNewestItems(null,
                                               explode(' ',
