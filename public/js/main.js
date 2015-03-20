@@ -18,7 +18,7 @@ $(function () {
     $('#fileupload').fileupload({
         // Uncomment the following to send cross-domain cookies:
         //xhrFields: {withCredentials: true},
-        url: 'http://localhost/newAuction/upload',
+        url: 'https://web.cs.manchester.ac.uk/mbax4pg2/eauction/newAuction/upload',
         singleFileUploads: false,
         loadImageMaxFileSize: 50000,
         imageMinWidth: 1000,
