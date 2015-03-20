@@ -12,12 +12,12 @@
   <div class="collapse navbar-collapse navbar-ex1-collapse">
     <ul class="nav nav-justified">
      <?php if (isset($userId) && $userId == Session::get('userId')): ?>
-      <li><a href="<?php echo ROOT_URL;?>/dashboard/editProfile">Edit profile</a></li>
+     <li><a href="<?php echo ROOT_URL;?>/dashboard/editProfile/<?php echo $userId;?>">Edit profile</a></li>
       <li><a href="<?php echo ROOT_URL;?>/dashboard/paymentHistory/<?php echo $userId;?>">Payment History</a></li>
       <li><a href="<?php echo ROOT_URL;?>/dashboard/wonAuctions/<?php echo $userId;?>">Won Auctions</a></li>
      <?php else:?>
-      <li><a href="<?php echo ROOT_URL;?>/dashboard/viewProfile">View profile</a></li>
-     <?php $userId = Session::get('userId'); endif;?>
+     <li><a href="<?php echo ROOT_URL;?>/dashboard/viewProfile/<?php echo $userId;?>">View profile</a></li>
+     <?php endif;?>
       <li><a href="<?php echo ROOT_URL;?>/dashboard/bidHistory/<?php echo $userId;?>">Bid History</a></li>
       <li><a href="<?php echo ROOT_URL;?>/dashboard/openedAuctions/<?php echo $userId;?>">Opened Auctions</a></li>
     </ul>
