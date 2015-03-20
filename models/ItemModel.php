@@ -129,7 +129,16 @@ class ItemModel extends Model {
         }
     }
 
-    public function newBuy() {
-        var_dump($_POST);
+    public function newBuy($itemId) {
+        $query = 'SELECT PayPalEmail FROM users WHERE id = ';
+        $query .=$_POST['sellerId'];
+        $stmt = $this->db->executeQuery($query);
+        $sellerPayPalEmail = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $sellerPayPalEmail = $sellerPayPalEmail[0]['PayPalEmail'];
+
+        require('libs/Payment.php');
+        $payment = new myPayment($itemId, $_POST['itemName'], $_POST['price'],
+                                 $sellerPayPalEmail);
+        $payment->makePayment();
     }
 }
