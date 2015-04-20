@@ -1,0 +1,6 @@
+{
+    "require": {
+        "monolog/monolog": "1.0.*",
+                "paypal/adaptivepayments-sdk-php":"v3.6.106"
+                    }
+}

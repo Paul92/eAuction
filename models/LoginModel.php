@@ -35,7 +35,7 @@ class LoginModel extends HashModel {
                 $errors[] = self::WRONG_USER_OR_PASS;
             } else {
                 $hash = $array['password'];
-                if (/*$this->validate_password($password, $hash)*/ $password==$hash) {
+                if ($this->validate_password($password, $hash)/* $password==$hash*/) {
                     Session::set('loggedIn', true);
                     Session::set('userId', $array['id']);
                     $this->generateWonAuction($array['id']);
@@ -69,8 +69,8 @@ class LoginModel extends HashModel {
 
     private function generateWonEnglishAuction($userId) {
         $query = 'INSERT INTO wonAuctions
-                  SELECT item.id AS itemId,
-                         bid.bidderId AS userId,
+                  SELECT bid.bidderId AS userId,
+                         item.id AS itemId,
                          bid.value AS value,
                          false,
                          item.endDate
@@ -87,6 +87,7 @@ class LoginModel extends HashModel {
                     AND item.id NOT IN
                         (SELECT itemId FROM wonAuctions WHERE
                                 userId = bid.bidderId)';
+echo $query;
         $this->db->executeQuery($query, array('id' => $userId));
     }
     private function generateWonVickeryAuction($userId) {
@@ -111,7 +112,7 @@ class LoginModel extends HashModel {
         if(count($params) < HASH_SECTIONS)
            return false;
         $pbkdf2 = base64_decode($params[HASH_PBKDF2_INDEX]);
-        return slow_equals($pbkdf2, pbkdf2($params[HASH_ALGORITHM_INDEX],
+        return $this->slow_equals($pbkdf2, $this->pbkdf2($params[HASH_ALGORITHM_INDEX],
                                            $password, $params[HASH_SALT_INDEX],
                                            (int)$params[HASH_ITERATION_INDEX],
                                            strlen($pbkdf2), true

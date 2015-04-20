@@ -26,7 +26,7 @@ foreach ($wonAuctions as $wonAuction) {
   if ($wonAuction['daysRemaining'] < 0 && $auction['payed'] == 0) {
       echo 'Your payment time has expired';
   } else if ($wonAuction['payed'] == 1) 
-      echo 'You payed for this item';
+      echo 'You paid for this item';
   else {
     echo '<div>';
     echo '<div class="top5 col-xs-4 col-md-6">';

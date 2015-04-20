@@ -75,11 +75,6 @@
     </div>
 
     <div class="col-md-6 col-sm-12 col-xs-12">
-        <input type="hidden" name="itemId" value="<?php echo $item['id'];?>">
-        <input type="hidden" name="auctionType"
-               value="<?php echo $item['auctionTypeId'];?>">
-        <input type="hidden" name="startPrice"
-               value="<?php echo $item['startPrice'];?>">
         <table class="table">
           <tr>
             <td>
@@ -184,7 +179,7 @@
               <form class="form-horizontal" method="post"
                    action="<?php echo ROOT_URL . '/item/bid/' . $item['id'];?>">
                 <input type="hidden" name="itemId"
-                       value="<?php echo $item['sellerId']?>">
+                       value="<?php echo $item['id']?>">
                 <input type="hidden" name="auctionType"
                        value="<?php echo $item['auctionTypeId']?>">
                 <input type="hidden" name="startPrice"
@@ -205,8 +200,12 @@
                    action="<?php echo ROOT_URL . '/item/buy/' . $item['id'];?>">
                 <input type="hidden" name="sellerId"
                        value="<?php echo $item['sellerId']?>">
-                <input type="hidden" name="price"
-                       value="<?php echo $item['currentPrice']?>">
+                  <input type="hidden" name="price"
+                <?php if ($item['auctionTypeId'] == 2): ?>
+                         value="<?php echo $item['currentPrice']?>">
+                <?php else:?>
+                         value="<?php echo $item['startPrice']?>">
+                <?php endif;?>
                 <input type="hidden" name="itemName"
                        value="<?php echo $item['name']?>">
                 <td><td>

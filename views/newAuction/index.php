@@ -78,7 +78,7 @@
             </div>
 
             <div class="top10 col-sm-12">
-              <label for="startPrice" class="control-label col-sm-4">Start price</label>
+              <label for="startPrice" class="control-label col-sm-4">Start price (&pound;)</label>
               <div class="col-sm-8">
                   <input type="text" class="form-control" id="startPrice" value=
                   "<?php if (isset($formArray['startPrice']))

@@ -836,8 +836,6 @@ class UploadHandler
     protected function imagick_create_scaled_image($file_name, $version, $options) {
         list($file_path, $new_file_path) =
             $this->get_scaled_image_file_paths($file_name, $version);
-        $f = fopen("file", "w");
-        fwrite($f, "AHA, $file_path,". $options['no_cache']);
         $image = $this->imagick_get_image_object(
             $file_path,
             !empty($options['no_cache'])
@@ -951,6 +949,7 @@ class UploadHandler
             $cmd .= ' '.$options['convert_params'];
         }
         $cmd .= ' '.escapeshellarg($new_file_path);
+
         exec($cmd, $output, $error);
         if ($error) {
             error_log(implode('\n', $output));
@@ -1039,12 +1038,9 @@ class UploadHandler
         $this->destroy_image_object($file_path);
     }
 
-    protected function handle_file_upload($uploaded_file, $name, $size, $type, $error,
-            $index = null, $content_range = null) {
-        echo $uploaded_file;
+    protected function handle_file_upload($uploaded_file, $name, $size, $type, $error, $index = null, $content_range = null) {
         $file = new \stdClass();
-        $file->name = $this->get_file_name($uploaded_file, $name, $size, $type, $error,
-            $index, $content_range);
+        $file->name = $this->get_file_name($uploaded_file, $name, $size, $type, $error, $index, $content_range);
         $file->size = $this->fix_integer_overflow((int)$size);
         $file->type = $type;
         if ($this->validate($uploaded_file, $file, $error, $index)) {

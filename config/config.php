@@ -1,12 +1,11 @@
 <?php
-require('config/constants.php');
 $PayPalMode         = 'sandbox'; // sandbox or live
 $PayPalApiUsername  = 'hasman2008ukea1_api2.hotmail.co.uk'; //PayPal API Username
 $PayPalApiEmail     = 'hasman2008ukea1@hotmail.co.uk';
 $PayPalApiPassword  = 'GLUEMD37ZRCGUDX5'; //Paypal API password
 $PayPalApiSignature = 'AiPC9BjkCyDFQXbSkoZcgqH3hpacAiJDSU1cTOPvMulWmlYVfjZvbSyD'; //Paypal API Signature
 $PayPalCurrencyCode = 'GBP'; //Paypal Currency Code
-$PayPalCancelURL    = ROOT_URL; //Cancel URL if user clicks cancel
+$PayPalCancelURL    = 'http://localhost'; //Cancel URL if user clicks cancel
 
 $taxPercent         = 0.2;
 $handalingCost      = 0; //Handling cost for this order.
@@ -19,5 +18,5 @@ $feePercent = 0.1;
 $maxFee = 200;
 
 $paypalmode = ($PayPalMode=='sandbox') ? '.sandbox' : '';
-$PayPalReturnURL    = ROOT_URL . '/processPayment/storeTransactionDetails';
+$PayPalReturnURL    = 'http://localhost/processPayment/storeTransactionDetails';
 ?>

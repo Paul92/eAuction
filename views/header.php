@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title> bootstrap </title>
+    <title> eAuction </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="<?php echo ROOT_URL;?>/public/css/bootstrap.min.css" rel="stylesheet">
     <link href="<?php echo ROOT_URL;?>/public/css/styles.css" rel="stylesheet">
-    <link rel="stylesheet" href="//blueimp.github.io/Gallery/css/blueimp-gallery.min.css">
+    <link rel="stylesheet" href="/public/css/blueimp-gallery.min.css">
     <link rel="stylesheet" href="<?php echo ROOT_URL;?>/public/css/style.css">
     <link rel="stylesheet" href="<?php echo ROOT_URL;?>/public/css/jquery.fileupload.css">
     <link rel="stylesheet" href="<?php echo ROOT_URL;?>/public/css/jquery.fileupload-ui.css">
@@ -131,6 +131,6 @@ html,body{
         </div>
       </div>
     </div>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="/public/js/jquery.min.js"></script>
     <script src="<?php echo ROOT_URL;?>/public/js/bootstrap.js"></script>
     <div id = wrapper>

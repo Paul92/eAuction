@@ -187,23 +187,25 @@ class NewAuctionModel extends Model {
             $GrandTotal         = $_SESSION['GrandTotal'];
             $ItemTotalPrice     = $_SESSION['GrandTotal'];
         
-            $padata =   '&TOKEN='.urlencode($token).
-                        '&PAYERID='.urlencode($payer_id).
-                        '&PAYMENTREQUEST_0_PAYMENTACTION='.urlencode("SALE").
-                        
-                        //set item info here, otherwise we won't see product details later  
-                        '&L_PAYMENTREQUEST_0_NAME0='.urlencode($ItemName).
-                        '&L_PAYMENTREQUEST_0_NUMBER0='.urlencode($ItemID).
-                        '&L_PAYMENTREQUEST_0_DESC0='.urlencode($ItemDesc).
-                        '&L_PAYMENTREQUEST_0_AMT0='.urlencode($ItemPrice).
-                        '&L_PAYMENTREQUEST_0_QTY0='. urlencode($ItemQty).
+            $padata = '&TOKEN='.urlencode($token).
+                      '&PAYERID='.urlencode($payer_id).
+                      '&PAYMENTREQUEST_0_PAYMENTACTION='.urlencode("SALE").
+                      
+                      //set item info here, otherwise we won't see product
+                      // details later  
+                      '&L_PAYMENTREQUEST_0_NAME0='.urlencode($ItemName).
+                      '&L_PAYMENTREQUEST_0_NUMBER0='.urlencode($ItemID).
+                      '&L_PAYMENTREQUEST_0_DESC0='.urlencode($ItemDesc).
+                      '&L_PAYMENTREQUEST_0_AMT0='.urlencode($ItemPrice).
+                      '&L_PAYMENTREQUEST_0_QTY0='. urlencode($ItemQty).
         
         
-                        '&PAYMENTREQUEST_0_ITEMAMT='.urlencode($ItemTotalPrice).
-                        '&PAYMENTREQUEST_0_AMT='.urlencode($GrandTotal).
-                        '&PAYMENTREQUEST_0_CURRENCYCODE='.urlencode($PayPalCurrencyCode);
+                      '&PAYMENTREQUEST_0_ITEMAMT='.urlencode($ItemTotalPrice).
+                      '&PAYMENTREQUEST_0_AMT='.urlencode($GrandTotal).
+                      '&PAYMENTREQUEST_0_CURRENCYCODE='.urlencode($PayPalCurrencyCode);
             
-            //We need to execute the "DoExpressCheckoutPayment" at this point to Receive payment from user.
+            //We need to execute the "DoExpressCheckoutPayment"
+            //at this point to Receive payment from user.
             $paypal= new MyPayPal();
             $httpParsedResponseAr = $paypal->PPHttpPost('DoExpressCheckoutPayment', $padata, $PayPalApiUsername, $PayPalApiPassword, $PayPalApiSignature, $PayPalMode);
             
@@ -243,18 +245,16 @@ class NewAuctionModel extends Model {
                             */
         
                             $query = 'INSERT INTO payment
-                                             (transactionId, token, userId,
+                                             (transactionId, userId,
                                               itemName, paymentDescription,
-                                              itemPrice, grandTotal, time)
-                                      VALUES (:transactionId, :token, :userId,
+                                              grandTotal, time)
+                                      VALUES (:transactionId, :userId,
                                               :itemName, :paymentDesc,
-                                              :itemPrice, :grandTotal, NOW())';
+                                              :grandTotal, NOW())';
                             $this->db->executeQuery($query,
                                 array('transactionId' => $transactionID,
-                                      'token' => $token,
                                       'userId' => Session::get('userId'),
                                       'itemName' => $ItemName,
-                                      'itemPrice' => $ItemTotalPrice,
                                       'paymentDesc' => $ItemDesc,
                                       'grandTotal' => $GrandTotal));
                             echo '<pre>';
@@ -286,12 +286,12 @@ class NewAuctionModel extends Model {
         
             $ItemName       = "Featured payment";
             $ItemPrice      = 10;
-        	  $ItemDesc       = "Featured payment for " . Session::get('itemName');
+            $ItemDesc       = "Featured payment for " . Session::get('itemName');
             $ItemID         = Session::get('itemId'); //Item ID
             $ItemQty        = 1; // Item Quantity
             
             $ItemTotalPrice = ($ItemPrice); 
-            $PayPalReturnURL = ROOT_URL . '/newAuction/runFeaturedPayment';
+            $PayPalReturnURL = 'http://localhost/newAuction/runFeaturedPayment';
         
             //Grand total including all tax, insurance, shipping cost and discount
             $GrandTotal = ($ItemTotalPrice);

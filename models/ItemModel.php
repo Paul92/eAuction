@@ -40,7 +40,7 @@ class ItemModel extends Model {
     }
 
     private function getDutchPrice($itemId) {
-        $query = 'SELECT startPrice - ROUND(CAST(CURDATE() - startDate AS INT)
+        $query = 'SELECT startPrice - ROUND(DATEDIFF(CURDATE(), startDate)
                          * 2 * startPrice / 100) AS currentPrice
                   FROM item WHERE id = :id';
         $stmt = $this->db->executeQuery($query, array('id' => $itemId));
@@ -136,6 +136,7 @@ class ItemModel extends Model {
         $sellerPayPalEmail = $sellerPayPalEmail[0]['PayPalEmail'];
 
         require('libs/Payment.php');
+        var_dump($_POST);
         $payment = new myPayment($itemId, $_POST['itemName'], $_POST['price'],
                                  $sellerPayPalEmail);
         $payment->makePayment();

@@ -27,9 +27,9 @@ class Item extends Controller {
 
     function buy($itemId) {
         $error = $this->model->newBuy($itemId);
-        //if ($error !== true)
-        //    $this->item($itemId, $error);
-        //else
-        //    header('Location: ' . ROOT_URL . '/index/index/bid_created');
+        if ($error !== true)
+            $this->item($itemId, $error);
+        else
+            header('Location: ' . ROOT_URL . '/index/index/bid_created');
     }
 }
